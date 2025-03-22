@@ -1,13 +1,13 @@
 ---
-name: Parth Desai
+name: Rishik R
 avatar: /static/images/avatar.png
-occupation: Data Engineer
-company: Accenture
-email: desaiparth2000@gmail.com
-twitter: https://twitter.com/_ParthDesai_
-linkedin: https://www.linkedin.com/in/parth-desai-2bb1b0160/
-github: https://github.com/pycoder2000
-text1: I am an India based Data Engineer with a bachelors in Computer Science. I am passionate about Data Science and Automation. I am also fascinated with Mathematics and wish to make a career out of it someday.
+occupation: Physicist
+company:
+email: rishikkumarr35@gmail.com
+twitter: https://twitter.com/rickastley
+linkedin: www.linkedin.com/in/rishikr31
+github: https://github.com/robotchickn1
+text1: I am a physicist. I am currently working in the field of Quantum Computing.
 text2:
 text3:
 ---
