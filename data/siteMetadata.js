@@ -1,12 +1,12 @@
 const siteMetadata = {
   title: 'Rishik | Website',
   author: 'Rishik R',
-  headerTitle: 'Mere Musings',
+  headerTitle: 'Some Musings',
   description: 'my website!',
   snippets: 'Reuseable code snippets collected by Rishik',
   language: 'en-us',
-  theme: 'dark', // system, dark or light
-  siteUrl: 'https://musing.vercel.app',
+  theme: 'system', // system, dark or light
+  siteUrl: 'https://rishikr.vercel.app',
   siteRepo: 'https://github.com/robotchickn1/blog',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
@@ -15,7 +15,7 @@ const siteMetadata = {
   github: 'https://github.com/robotchickn1',
   twitter: 'https://twitter.com/rickastley',
   linkedin: 'www.linkedin.com/in/rishikr31',
-  website: 'https://parthdesai.vercel.app',
+  website: 'https://rishikr.vercel.app',
   locale: 'en-US',
   analytics: {
     plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
@@ -46,7 +46,7 @@ const siteMetadata = {
     },
   },
   socialAccount: {
-    twitter: '_ParthDesai_',
+    twitter: 'robotchickn1',
   },
 }
 

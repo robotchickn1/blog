@@ -1,11 +1,11 @@
 {
-  "name": "parth-desai-blog",
+  "name": "rishik-blog",
   "version": "1.5.6",
   "private": true,
   "author": {
-    "name": "Parth Desai",
-    "email": "desaiparth2000@gmail.com",
-    "url": "https://musing.vercel.app/"
+    "name": "Rishik R",
+    "email": "rishikkumarr35@gmail.com",
+    "url": "https://rishikr.vercel.app/"
   },
   "scripts": {
     "start": "cross-env SOCKET=true node ./scripts/next-remote-watch.js ./data",
@@ -19,7 +19,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pycoder2000/blog.git"
+    "url": "git+https://github.com/robotchickn1/blog.git"
   },
   "dependencies": {
     "@fontsource/inter": "4.5.2",
