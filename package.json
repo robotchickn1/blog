@@ -8,8 +8,8 @@
     "url": "https://rishikr.vercel.app/"
   },
   "scripts": {
+    "dev": "cross-env NODE_EXTRA_CA_CERTS=C:\\Users\\Rishik\\Downloads\\SecurityAppliance_SSL_CA.pem next dev",
     "start": "cross-env SOCKET=true node ./scripts/next-remote-watch.js ./data",
-    "dev": "next dev",
     "build": "next build && node ./scripts/generate-sitemap",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
