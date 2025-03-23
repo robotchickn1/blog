@@ -24,8 +24,7 @@ export default function GuestbookPage({ fallbackData }) {
             Guestbook
           </h1>
           <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
-            An artifact of the 90's webs. Leave a comment below for my future visitors. Feel free to
-            write anything!
+            Leave a comment below for my future visitors. Feel free to write anything!
           </p>
         </div>
         <Guestbook fallbackData={fallbackData} />
