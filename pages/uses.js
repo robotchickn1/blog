@@ -15,10 +15,7 @@ export default function Uses() {
           <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
             Software and hardware collection of things I'm using daily.
           </p>
-          <div className="mt-5 mb-3 text-xs text-gray-500 dark:text-gray-400">
-            Note: This page contains links to buy or download the products. If you click through and
-            purchase, I do not receive any compensation for that purchase.
-          </div>
+          <div className="mt-5 mb-3 text-xs text-gray-500 dark:text-gray-400"></div>
         </div>
         <div className="container py-12">
           <div className="flex flex-row flex-wrap">

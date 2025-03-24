@@ -30,7 +30,7 @@ export default function Home({ posts }) {
               </span>
             </h1>
             <h2 className="prose pt-5 text-lg text-gray-600 dark:text-gray-300">
-              {`Welcome to ${siteMetadata.description} I am currently pursuing my Master's in Physics. Apart from reading (Nielsen and Chuang)'s Quantum Computation and Quantum Information, I play the piano, write sketches and  `}
+              {`Welcome to ${siteMetadata.description} I am currently pursuing my Master's in Physics. Apart from reading (Nielsen and Chuang)'s Quantum Computation and Quantum Information, I also play the piano, write sketches and  `}
               dip myself in learning new stuff.
             </h2>
 
