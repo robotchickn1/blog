@@ -14,31 +14,33 @@ import { FaGoogle, FaGithub } from 'react-icons/fa'
 function GuestbookEntry({ entry, user }) {
   const { mutate } = useSWRConfig()
 
-  const deleteEntry = async (e) => {
+  const handleDelete = async (e) => {
     e.preventDefault()
-
     try {
-      await fetch(`/api/guestbook/${entry.id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/guestbook/${entry.id}`, { method: 'DELETE' })
+
+      if (!res.ok) throw new Error('Failed to delete entry.')
+
       mutate('/api/guestbook')
     } catch (error) {
-      console.error('Failed to delete entry:', error)
+      console.error('Delete error:', error)
     }
   }
 
-  const isOwner = user && entry.created_by === user.name
+  const isOwner = user?.name === entry.created_by
 
   return (
     <div className="my-4 w-full rounded-md border border-gray-100 bg-gray-100 px-4 py-4 shadow-sm shadow-gray-300 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
       <div className="mb-2 text-neutral-900 dark:text-neutral-300">{entry.body}</div>
-      <div className="text-gray-600 text-opacity-80 dark:text-white">
-        <p className="text-sm text-gray-500">
+      <div className="text-sm text-gray-600 dark:text-white">
+        <p className="text-gray-500">
           {entry.created_by} • {format(new Date(entry.updated_at), "d MMM yyyy 'at' h:mm bb")}
         </p>
         {isOwner && (
           <button
             aria-label="Delete comment"
-            className="mt-2 text-sm text-red-600 hover:underline dark:text-red-400"
-            onClick={deleteEntry}
+            onClick={handleDelete}
+            className="mt-2 text-red-600 hover:underline dark:text-red-400"
           >
             Delete
           </button>
@@ -54,8 +56,7 @@ export default function Guestbook({ fallbackData }) {
   const { mutate } = useSWRConfig()
 
   const [form, setForm] = useState({ state: '', message: '' })
-  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false)
-  const [isLoadingGithub, setIsLoadingGithub] = useState(false)
+  const [loadingProvider, setLoadingProvider] = useState(null)
 
   const inputEl = useRef(null)
   const { data: entries } = useSWR('/api/guestbook', fetcher, { fallbackData })
@@ -63,43 +64,46 @@ export default function Guestbook({ fallbackData }) {
   const leaveEntry = async (e) => {
     e.preventDefault()
 
-    const newBody = inputEl.current.value.trim()
+    const message = inputEl.current.value.trim()
 
-    if (!newBody) {
+    if (!message) {
       setForm({ state: 'error', message: 'Message cannot be empty.' })
       return
     }
 
-    setForm({ state: 'loading' })
+    setForm({ state: 'loading', message: '' })
 
-    const res = await fetch('/api/guestbook', {
-      body: JSON.stringify({ body: newBody }),
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST',
-    })
-
-    const result = await res.json()
-
-    if (!res.ok || result.error) {
-      setForm({
-        state: 'error',
-        message: result.error || 'Something went wrong!',
+    try {
+      const res = await fetch('/api/guestbook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ body: message }),
       })
-      return
+
+      const data = await res.json()
+
+      if (!res.ok || data.error) {
+        throw new Error(data.error || 'Something went wrong!')
+      }
+
+      inputEl.current.value = ''
+      mutate('/api/guestbook')
+
+      setForm({ state: 'success', message: 'Hooray! Thanks for signing my Guestbook.' })
+    } catch (error) {
+      console.error('Submit error:', error)
+      setForm({ state: 'error', message: error.message || 'Something went wrong.' })
     }
+  }
 
-    inputEl.current.value = ''
-    mutate('/api/guestbook')
-
-    setForm({
-      state: 'success',
-      message: 'Hooray! Thanks for signing my Guestbook.',
-    })
+  const handleSignIn = (provider) => {
+    setLoadingProvider(provider)
+    signIn(provider)
   }
 
   return (
     <>
-      {/* Form / Auth Section */}
+      {/* Auth & Form Section */}
       <div className="my-2 w-full rounded-md border border-gray-200 bg-white px-6 py-4 shadow-xl shadow-gray-400 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
         <div className="text-center">
           <h5 className="mt-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -110,14 +114,11 @@ export default function Guestbook({ fallbackData }) {
         {!session && (
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
             <button
-              onClick={() => {
-                setIsLoadingGithub(true)
-                signIn('github')
-              }}
-              disabled={isLoadingGithub}
+              onClick={() => handleSignIn('github')}
+              disabled={loadingProvider === 'github'}
               className="flex flex-1 items-center justify-center gap-2 rounded bg-neutral-100 py-3 text-sm font-medium text-gray-900 ring-gray-300 transition-all hover:ring-2 dark:bg-zinc-800 dark:text-gray-100"
             >
-              {isLoadingGithub ? (
+              {loadingProvider === 'github' ? (
                 <>
                   Loading <LoadingSpinner className="ml-2" />
                 </>
@@ -130,14 +131,11 @@ export default function Guestbook({ fallbackData }) {
             </button>
 
             <button
-              onClick={() => {
-                setIsLoadingGoogle(true)
-                signIn('google')
-              }}
-              disabled={isLoadingGoogle}
+              onClick={() => handleSignIn('google')}
+              disabled={loadingProvider === 'google'}
               className="flex flex-1 items-center justify-center gap-2 rounded bg-neutral-100 py-3 text-sm font-medium text-gray-900 ring-gray-300 transition-all hover:ring-2 dark:bg-zinc-800 dark:text-gray-100"
             >
-              {isLoadingGoogle ? (
+              {loadingProvider === 'google' ? (
                 <>
                   Loading <LoadingSpinner className="ml-2" />
                 </>
@@ -165,7 +163,8 @@ export default function Guestbook({ fallbackData }) {
 
             <button
               type="submit"
-              className="grid w-full place-items-center rounded bg-neutral-100 px-3 py-2 font-medium ring-gray-300 transition-all hover:ring-2 dark:bg-gray-600"
+              disabled={form.state === 'loading'}
+              className="grid w-full place-items-center rounded bg-neutral-100 px-3 py-2 font-medium ring-gray-300 transition-all hover:ring-2 dark:bg-gray-600 dark:text-white"
             >
               {form.state === 'loading' ? <LoadingSpinner /> : 'Sign'}
             </button>
@@ -173,8 +172,16 @@ export default function Guestbook({ fallbackData }) {
         )}
 
         {/* Feedback messages */}
-        {form.state === 'error' && <ErrorMessage>{form.message}</ErrorMessage>}
-        {form.state === 'success' && <SuccessMessage>{form.message}</SuccessMessage>}
+        {form.state === 'error' && (
+          <div className="mt-3">
+            <ErrorMessage>{form.message}</ErrorMessage>
+          </div>
+        )}
+        {form.state === 'success' && (
+          <div className="mt-3">
+            <SuccessMessage>{form.message}</SuccessMessage>
+          </div>
+        )}
       </div>
 
       {/* Guestbook Entries */}
