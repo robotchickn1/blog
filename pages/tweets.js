@@ -31,7 +31,12 @@ export async function getStaticProps() {
     '1002104154737684480',
   ])
 
-  return { props: { tweets } }
+  return {
+    props: {
+      tweets: tweets || [], // Provide an empty array fallback
+    },
+    revalidate: 60, // Optional: Incremental Static Regeneration
+  }
 }
 
 export default function Tweets({ tweets }) {
@@ -51,9 +56,15 @@ export default function Tweets({ tweets }) {
             place to publicly share what inspires me, makes me laugh, and makes me think.
           </p>
         </div>
-        {tweets.map((tweet) => (
-          <Tweet key={tweet.id} {...tweet} />
-        ))}
+
+        {/* Handle loading or empty state gracefully */}
+        {tweets && tweets.length > 0 ? (
+          tweets.map((tweet) => <Tweet key={tweet.id} {...tweet} />)
+        ) : (
+          <p className="mt-4 text-gray-500 dark:text-gray-400">
+            No tweets available at the moment. Please check back later!
+          </p>
+        )}
       </div>
     </>
   )
