@@ -67,12 +67,13 @@ export default function AuthorLayout({ children, frontMatter }) {
                 animationDelay={300}
                 animationDuration={3000}
               >
-                {text1} Currently, I am focused on building data pipelines and automating them at{' '}
+                {text1} More specifically, I am trying to physically realize entanglement of Rydberg
+                Atoms at the{' '}
                 <Link
-                  href={'https://www.accenture.com/in-en'}
+                  href={'https://wwws.rri.res.in/~qumix/'}
                   className="special-underline no-underline hover:text-gray-100 dark:text-gray-100 hover:dark:text-gray-100"
                 >
-                  Accenture
+                  QuMix Lab at RRI.
                 </Link>
               </RoughNotation>
             </p>
@@ -92,7 +93,7 @@ export default function AuthorLayout({ children, frontMatter }) {
               related to
               <span className="font-semibold">
                 {' '}
-                Natural Language Processing and Machine Learning.{' '}
+                Quantum Information and Computing using photons.{' '}
               </span>
               At the same time I am{' '}
               <RoughNotation
@@ -103,8 +104,8 @@ export default function AuthorLayout({ children, frontMatter }) {
                 animationDuration={3000}
                 multiline={true}
               >
-                actively on the lookout for remote internships which I can pursue in field of Data
-                Science.
+                actively on the lookout for remote internships which I can pursue in field of
+                AStrophysics and Nuclear Physics.
               </RoughNotation>
             </p>
             <p className="hidden md:block">
@@ -119,7 +120,7 @@ export default function AuthorLayout({ children, frontMatter }) {
                 show={true}
               >
                 <span className="text-black dark:text-white">
-                  Natural Language Processing and Machine Learning.{' '}
+                  Quantum Information and Computing using photons.{' '}
                 </span>
               </RoughNotation>
               At the same time I am{' '}
@@ -131,15 +132,15 @@ export default function AuthorLayout({ children, frontMatter }) {
                 animationDuration={3000}
                 multiline={true}
               >
-                actively on the lookout for remote internships which I can pursue in field of Data
-                Science
+                actively on the lookout for remote internships which I can pursue in field of
+                Astrophysics and Nuclear Physics.
               </RoughNotation>
             </p>
             <br />
             <p>
-              I am a strong advocate for open source and I am always interested in working on new
-              projects with new people. Feel free to reach out if you have anything to talk about,
-              you can reach me through{' '}
+              I am a strong advocate for Science and I am always interested in working on projects
+              with new people. Feel free to reach out if you have anything to talk about, you can
+              reach me through{' '}
               <Link
                 href={'mailto:rishikkumarr35@gmail.com'}
                 className="special-underline no-underline hover:text-gray-100 dark:text-gray-100 hover:dark:text-gray-100"
@@ -159,26 +160,6 @@ export default function AuthorLayout({ children, frontMatter }) {
                   </g>
                 </svg>
               </Link>{' '}
-              or{' '}
-              <Link
-                href={'https://api.whatsapp.com/send?phone=916358190818&text=hi'}
-                className="special-underline no-underline hover:text-gray-100 dark:text-gray-100 hover:dark:text-gray-100"
-              >
-                Whatsapp
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  className="ml-0.5 inline-block h-4 w-4 fill-current"
-                >
-                  <g data-name="Layer 2">
-                    <g data-name="external-link">
-                      <rect width="24" height="24" opacity="0" />
-                      <path d="M20 11a1 1 0 0 0-1 1v6a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6a1 1 0 0 0 0-2H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-6a1 1 0 0 0-1-1z" />
-                      <path d="M16 5h1.58l-6.29 6.28a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0L19 6.42V8a1 1 0 0 0 1 1 1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-4a1 1 0 0 0 0 2z" />
-                    </g>
-                  </g>
-                </svg>
-              </Link>
             </p>
             <br />
             <p>
@@ -223,10 +204,10 @@ export default function AuthorLayout({ children, frontMatter }) {
                 </li>
                 <li>
                   <Link
-                    href={'https://www.einargudni.com/'}
+                    href={'https://github.com/pycoder2000/blog'}
                     className="special-underline no-underline hover:text-gray-100 dark:text-gray-100 hover:dark:text-gray-100"
                   >
-                    Einar Guðjónsson
+                    Parth Desai
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -241,7 +222,7 @@ export default function AuthorLayout({ children, frontMatter }) {
                       </g>
                     </svg>
                   </Link>
-                  : Now page, navigation style, animations and much more.
+                  : Basically, this website exists beacuse of his github repo. Thanks Parth!
                 </li>
               </ul>
             </p>
