@@ -47,7 +47,7 @@ export default function Recommends() {
         {/* 🎵 Music Section */}
         <div className="py-10">
           <h2 className="text-center text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-4xl md:leading-14">
-            🎵 Music Albums
+            🎷 Music Albums
           </h2>
           <p className="text-md text-center leading-7 text-gray-500 dark:text-gray-400">
             "Music is the divine way to tell beautiful, poetic things to the heart."
@@ -67,13 +67,13 @@ export default function Recommends() {
           </div>
         </div>
 
-        {/* 🎶 Bonus Album Section */}
+        {/* 🎹 Bonus Album Section - Centered */}
         <div className="py-10">
           <h2 className="text-center text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-4xl md:leading-14">
-            🌟 Bonus Album
+            🎹 Bonus Album
           </h2>
 
-          <div className="grid grid-cols-1 gap-6 py-6 sm:grid-cols-2 md:grid-cols-3">
+          <div className="flex justify-center py-6">
             {musicData.bonusAlbums.map((album) => (
               <RecommendCard
                 key={album.title}

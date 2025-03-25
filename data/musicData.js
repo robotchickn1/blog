@@ -30,7 +30,7 @@ const musicData = {
       title: 'Chromatic Grammatic',
       artist: 'Lydian Nadhaswaram',
       description:
-        "As much as he gets the spotlight for his piano skills, I still feel he is extremely underrated. By the way in this album, there's a song for every key centre!",
+        "An extremely underrated musician (not pianist). By the way, there's a song for all key centres in here!",
       tags: ['Jazz Fusion', 'Instrumental'],
       href: 'https://open.spotify.com/album/4b8lB5aB85zi2xFkgNSlF3',
       poster: '/static/images/music/chromatic-grammatic.jpg',
