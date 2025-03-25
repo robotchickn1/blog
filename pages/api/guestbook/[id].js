@@ -4,14 +4,22 @@ import prisma from 'lib/prisma'
 export default async function handler(req, res) {
   const session = await getSession({ req })
 
-  const { id } = req.query
-  const { email } = session.user
+  if (!session) {
+    return res.status(403).json({ error: 'Unauthorized' })
+  }
 
+  const { id } = req.query
+
+  // Fetch entry
   const entry = await prisma.guestbook.findUnique({
     where: {
       id: Number(id),
     },
   })
+
+  if (!entry) {
+    return res.status(404).json({ error: 'Entry not found' })
+  }
 
   if (req.method === 'GET') {
     return res.json({
@@ -22,8 +30,8 @@ export default async function handler(req, res) {
     })
   }
 
-  if (!session || email !== entry.email) {
-    return res.status(403).send('Unauthorized')
+  if (session.user.email !== entry.email) {
+    return res.status(403).json({ error: 'Unauthorized' })
   }
 
   if (req.method === 'DELETE') {
@@ -32,7 +40,6 @@ export default async function handler(req, res) {
         id: Number(id),
       },
     })
-
     return res.status(204).json({})
   }
 
@@ -40,9 +47,7 @@ export default async function handler(req, res) {
     const body = (req.body.body || '').slice(0, 500)
 
     await prisma.guestbook.update({
-      where: {
-        id: Number(id),
-      },
+      where: { id: Number(id) },
       data: {
         body,
         updated_at: new Date().toISOString(),
@@ -55,5 +60,5 @@ export default async function handler(req, res) {
     })
   }
 
-  return res.send('Method not allowed.')
+  return res.status(405).json({ error: `Method ${req.method} Not Allowed` })
 }

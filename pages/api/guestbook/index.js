@@ -24,17 +24,14 @@ export default async function handler(req, res) {
     }
   }
 
-  // Handle POST request
   if (req.method === 'POST') {
     const session = await getSession({ req })
 
-    // Always check session before using session.user
-    if (!session) {
+    if (!session || !session.user) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
 
-    const { email, name } = session.user
-
+    const { name } = session.user
     const bodyContent = (req.body.body || '').slice(0, 500).trim()
 
     if (!bodyContent) {
@@ -44,7 +41,6 @@ export default async function handler(req, res) {
     try {
       const newEntry = await prisma.guestbook.create({
         data: {
-          email,
           body: bodyContent,
           created_by: name,
         },
@@ -62,7 +58,5 @@ export default async function handler(req, res) {
     }
   }
 
-  // Handle unsupported methods
-  res.setHeader('Allow', ['GET', 'POST'])
   return res.status(405).json({ error: `Method ${req.method} Not Allowed` })
 }

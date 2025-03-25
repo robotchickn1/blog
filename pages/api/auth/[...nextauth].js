@@ -37,7 +37,7 @@ async function refreshAccessToken(token) {
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
     }
   } catch (error) {
-    console.error('Error refreshing Spotify token:', error)
+    console.error('❌ Error refreshing Spotify token:', error)
     return { ...token, error: 'RefreshAccessTokenError' }
   }
 }
@@ -46,12 +46,15 @@ export default NextAuth({
   debug: true,
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID, // ✅ Fixed
-      clientSecret: process.env.GITHUB_CLIENT_SECRET, // ✅ Fixed
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: { scope: 'openid email profile' }, // ✅ Ensures correct Google OAuth scopes
+      },
     }),
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -60,7 +63,8 @@ export default NextAuth({
         'https://accounts.spotify.com/authorize?scope=user-read-email,user-read-private,user-read-recently-played,user-top-read,user-library-read',
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET, // ✅ Use NEXTAUTH_SECRET
+
+  secret: process.env.NEXTAUTH_SECRET, // ✅ Ensure this is set properly
 
   session: { strategy: 'jwt' },
 
