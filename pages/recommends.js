@@ -73,9 +73,11 @@ export default function Recommends(reviews) {
               <span role="img" className="mr-4" aria-label="wave">
                 🍿
               </span>
-              Movies
+              Films
             </h2>
-            <p className="text-md leading-7 text-gray-500 dark:text-gray-400">Life's a Movie.</p>
+            <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
+              Cinema is the greatest inflencer.
+            </p>
           </div>
           <div className="container py-4">
             <div className="-m-4 flex flex-wrap">

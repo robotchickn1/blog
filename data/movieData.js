@@ -1,40 +1,33 @@
 const movieData = [
   {
-    title: 'The Black Phone',
-    description: `Absolutely loved this movie! Really fun and effective horror movie. Ethan Hawke was so electric`,
-    tags: ['Horror'],
-    href: 'https://letterboxd.com/film/the-black-phone/',
+    title: 'Pilla Jamindar',
+    description: `The title looks crass. But, this movie is one of the most enlightening films ever made. Also, it's pretty funny!`,
+    tags: ['Comedy', 'Drama'],
+    href: 'https://letterboxd.com/film/pilla-zamindar/',
   },
   {
     title: 'Tumbbad',
-    description: `A gorgeous looking, intriguing morality tale.. An ancient myth. A hideous demon. Hidden treasure. Human greed. This potent mix is stirred and ground in Tumbbad, and the result is a highly unusual, visually stunning, richly atmospheric concoction of genres and themes`,
+    description: `One of my friends recommended me this movie after I complained about the current state of cinema in India. This is a rare gem.`,
     tags: ['Horror'],
     href: 'https://letterboxd.com/film/tumbbad/',
   },
   {
-    title: 'Blackmail',
-    description: `Pitch black humour hardly seen in a Hindi film. It has sort of a neon lit cramminess to it.
-    Irrfan Khand and Arunoday Singh were terrific`,
-    tags: ['Comedy', 'Dark'],
-    href: 'https://letterboxd.com/film/blackmail-2018/',
+    title: 'Swati Kiranam',
+    description: `Swathi Kiranam stands out to be the first film of Viswanath (garu) that I saw. My God! I cried like a zillion times in that movie.`,
+    tags: ['Comedy', 'Music'],
+    href: 'https://letterboxd.com/film/swati-kiranam/',
   },
   {
-    title: 'Maharathi',
-    description: `Inspired by James Hadley Chase's 1956 novel, There's Always a Price Tag this is a gem of a little movie which was thoroughly enjoyable`,
+    title: 'The Grand Budapest Hotel',
+    description: `Wes Anderson's movies have that peculiar characterisitc where every frame is actually a painting.`,
     tags: ['Thriller'],
-    href: 'https://letterboxd.com/film/maharathi/',
+    href: 'https://letterboxd.com/film/the-grand-budapest-hotel/',
   },
   {
-    title: 'Get Out',
-    description: `This was on of the best movie of that year and Jordan Peele is the next Stanley Kubrick`,
-    tags: ['Horror', 'Thriller'],
-    href: 'https://letterboxd.com/film/get-out-2017/',
-  },
-  {
-    title: 'Shutter Island',
-    description: `An excellent psychological thriller! Some real bone-chilling stuff going on here. Another well made film from Mr. Scorsese!`,
-    tags: ['Mystery', 'Thriller', 'Drama'],
-    href: 'https://letterboxd.com/film/shutter-island/',
+    title: 'All We Imagine as Light',
+    description: `As someone said, "I haven't seen a movie with such 'soul' in a long time."`,
+    tags: ['Drama', 'Payal Kapadia'],
+    href: 'https://letterboxd.com/film/all-we-imagine-as-light/',
   },
 ]
 
