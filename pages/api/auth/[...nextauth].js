@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
-import SpotifyProvider from 'next-auth/providers/spotify' // ✅ Import Spotify
+import SpotifyProvider from 'next-auth/providers/spotify'
 
-// Optional: Token refresh logic for Spotify
+// ✅ Token refresh logic for Spotify
 async function refreshAccessToken(token) {
   try {
     const url = 'https://accounts.spotify.com/api/token'
@@ -27,22 +27,18 @@ async function refreshAccessToken(token) {
     const refreshedTokens = await response.json()
 
     if (!response.ok) {
-      throw refreshedTokens
+      throw new Error(`Spotify Token Refresh Error: ${JSON.stringify(refreshedTokens)}`)
     }
 
     return {
       ...token,
       accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000, // 1 hour
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
     }
   } catch (error) {
-    console.error('Error refreshing Spotify token', error)
-
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-    }
+    console.error('Error refreshing Spotify token:', error)
+    return { ...token, error: 'RefreshAccessTokenError' }
   }
 }
 
@@ -50,8 +46,8 @@ export default NextAuth({
   debug: true,
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_KEY,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientId: process.env.GITHUB_CLIENT_ID, // ✅ Fixed
+      clientSecret: process.env.GITHUB_CLIENT_SECRET, // ✅ Fixed
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -64,37 +60,46 @@ export default NextAuth({
         'https://accounts.spotify.com/authorize?scope=user-read-email,user-read-private,user-read-recently-played,user-top-read,user-library-read',
     }),
   ],
-  secret: process.env.SECRET,
-  session: {
-    strategy: 'jwt',
-  },
+  secret: process.env.NEXTAUTH_SECRET, // ✅ Use NEXTAUTH_SECRET
+
+  session: { strategy: 'jwt' },
+
   callbacks: {
     async jwt({ token, account, user }) {
-      // Initial sign in
       if (account && user) {
         return {
           ...token,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
-          accessTokenExpires: account.expires_at * 1000, // Spotify returns in seconds
+          accessTokenExpires: account.expires_at * 1000,
           user,
         }
       }
 
-      // Return previous token if the access token is still valid
       if (Date.now() < token.accessTokenExpires) {
         return token
       }
 
-      // Access token has expired, try to update it
       return await refreshAccessToken(token)
     },
     async session({ session, token }) {
       session.user = token.user
       session.accessToken = token.accessToken
-      session.error = token.error
-
+      session.error = token.error || null
       return session
+    },
+  },
+
+  pages: {
+    error: '/auth/error', // ✅ Redirects to a custom error page if OAuth fails
+  },
+
+  events: {
+    async signIn({ user, account }) {
+      console.log(`✅ Sign-in successful: ${user.email} via ${account.provider}`)
+    },
+    async error(message) {
+      console.error(`❌ NextAuth Error: ${message}`)
     },
   },
 })

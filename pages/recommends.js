@@ -50,7 +50,7 @@ export default function Recommends() {
             🎷 Music Albums
           </h2>
           <p className="text-md text-center leading-7 text-gray-500 dark:text-gray-400">
-            "Music is the divine way to tell beautiful, poetic things to the heart."
+            "Music is a divine way to tell beautiful, poetic things to the heart."
           </p>
 
           <div className="grid grid-cols-1 gap-6 py-6 sm:grid-cols-2 md:grid-cols-3">
