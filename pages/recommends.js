@@ -13,10 +13,10 @@ export default function Recommends() {
       <div className="mx-auto max-w-5xl px-4">
         <div className="space-y-2 pt-6 pb-8 text-center md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
-            Recommends
+            Recommendations
           </h1>
           <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
-            A list of recommended movies and more
+            A list of recommended films, albums and other things
           </p>
         </div>
 
@@ -29,7 +29,7 @@ export default function Recommends() {
             Films
           </h2>
           <p className="text-md text-center leading-7 text-gray-500 dark:text-gray-400">
-            Cinema is the greatest influencer.
+            "Cinema is the most beautiful fraud in the world."
           </p>
 
           {/* Movie Cards Grid */}
