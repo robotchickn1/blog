@@ -69,6 +69,7 @@ module.exports = withBundleAnalyzer({
       'cdn.hashnode.com',
       'res.craft.do',
       'res.cloudinary.com', // Twitter Profile Picture
+      'phys.robotc.workers.dev',
     ],
   },
   rewrites: async () => [

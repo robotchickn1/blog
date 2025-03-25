@@ -1,5 +1,5 @@
 const siteMetadata = {
-  title: 'Rishik | Website',
+  title: 'Rishik R | Vercel',
   author: 'Rishik R',
   headerTitle: 'Some Musings',
   description: 'my website!',
