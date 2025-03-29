@@ -13,8 +13,9 @@ import LayoutWrapper from '@/components/LayoutWrapper'
 import { ClientReload } from '@/components/ClientReload'
 import ProgressBar from 'react-scroll-progress-bar'
 import ScrollTop from '@/components/ScrollTop'
-import { SessionProvider } from 'next-auth/react'
+import { SessionProvider, signOut } from 'next-auth/react'
 import { Provider } from '@lyket/react'
+import { useEffect } from 'react'
 
 const isDevelopment = process.env.NODE_ENV === 'development'
 const isSocket = process.env.SOCKET
@@ -22,17 +23,14 @@ const isSocket = process.env.SOCKET
 NProgress.configure({ showSpinner: false })
 
 Router.onRouteChangeStart = () => {
-  // console.log('onRouteChangeStart triggered');
   NProgress.start()
 }
 
 Router.onRouteChangeComplete = () => {
-  // console.log('onRouteChangeComplete triggered');
   NProgress.done()
 }
 
 Router.onRouteChangeError = () => {
-  // console.log('onRouteChangeError triggered');
   NProgress.done()
 }
 
@@ -51,6 +49,28 @@ const defaultTheme = {
 }
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
+  useEffect(() => {
+    let timeout = setTimeout(() => {
+      signOut({ callbackUrl: '/' })
+    }, 5 * 60 * 1000) // 🔥 Auto-logout after 5 minutes (300,000 ms)
+
+    const resetTimer = () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        signOut({ callbackUrl: '/' })
+      }, 5 * 60 * 1000)
+    }
+
+    window.addEventListener('mousemove', resetTimer)
+    window.addEventListener('keydown', resetTimer)
+
+    return () => {
+      clearTimeout(timeout)
+      window.removeEventListener('mousemove', resetTimer)
+      window.removeEventListener('keydown', resetTimer)
+    }
+  }, [])
+
   return (
     <SessionProvider session={session}>
       <Provider apiKey="pt_ac1b18fa4c8c4992f045da3c8fb280" theme={defaultTheme}>

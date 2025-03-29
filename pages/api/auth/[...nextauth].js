@@ -3,6 +3,8 @@ import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 import SpotifyProvider from 'next-auth/providers/spotify'
 
+const FIVE_MINUTES = 5 * 60 * 1000 // 5 minutes in milliseconds
+
 // ✅ Token refresh logic for Spotify
 async function refreshAccessToken(token) {
   try {
@@ -66,7 +68,10 @@ export default NextAuth({
 
   secret: process.env.NEXTAUTH_SECRET, // ✅ Ensure this is set properly
 
-  session: { strategy: 'jwt' },
+  session: {
+    strategy: 'jwt',
+    maxAge: 5 * 60, // ✅ Auto logout after 5 minutes
+  },
 
   callbacks: {
     async jwt({ token, account, user }) {
@@ -75,7 +80,7 @@ export default NextAuth({
           ...token,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
-          accessTokenExpires: account.expires_at * 1000,
+          accessTokenExpires: Date.now() + FIVE_MINUTES, // ✅ Auto logout in 5 min
           user,
         }
       }
@@ -87,6 +92,11 @@ export default NextAuth({
       return await refreshAccessToken(token)
     },
     async session({ session, token }) {
+      if (Date.now() > token.accessTokenExpires) {
+        console.log('❌ Session expired, logging out...')
+        return null // ✅ Forces logout after 5 minutes
+      }
+
       session.user = token.user
       session.accessToken = token.accessToken
       session.error = token.error || null
@@ -95,6 +105,8 @@ export default NextAuth({
   },
 
   pages: {
+    signIn: '/auth/signin',
+    signOut: '/auth/signout',
     error: '/auth/error', // ✅ Redirects to a custom error page if OAuth fails
   },
 
