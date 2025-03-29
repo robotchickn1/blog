@@ -12,20 +12,19 @@ summary: Running a simulation of a gaseous system of 0.1 million atoms using Sci
 
 ## Software
 
-- [Scilab](https://www.scilab.org/) – for writing algorithms to create a gaseous system.
-- [VMD (Visual Molecular Dynamics)](https://www.ks.uiuc.edu/Research/vmd/) – for visualization of the simulated gaseous system.
-- [xmgrace](https://plasma-gate.weizmann.ac.il/Grace/) – for plotting data.
+- [Scilab](https://www.scilab.org/) - for writing the algorithms to create a gaseous system
+- [VMD (Visual Molecular Dynamics)](https://www.ks.uiuc.edu/Research/vmd/) - for visualization of a simulated gaseous system
+- [xmgrace](https://plasma-gate.weizmann.ac.il/Grace/) - for plotting data
 
 ## Theory
 
 ### Molecular Dynamics
 
 - Molecular dynamics (MD) is a computer simulation method for analyzing the physical movements of atoms and molecules, obtained by numerically solving Newton's equations of motion for a system of interacting particles.
-- In MD, the nuclear motion of the constituent particles is assumed to obey the laws of classical mechanics. This is a very good approximation for a wide range of materials. Quantum effects start when we consider the translational or rotational motion of light atoms or molecules (He, H₂, D₂) or vibrational motion with a frequency such that:
-
-$$
-h\nu > k_B T
-$$
+- In MD, the nuclear motion of the constituent particles is assumed to obey the laws of classical mechanics only. This is a very good approximation for a wide range of materials. Quantum effects start when we consider the translational or rotational motion of light atoms or molecules (He, H2, D2) or vibrational motion with a frequency such that
+  $$
+  h\nu\;>\;k_{B}T
+  $$
 
 ### Periodic Boundary Conditions
 
@@ -34,15 +33,14 @@ Periodic Boundary Conditions (PBCs) simulate an _infinite system_ by wrapping pa
 When a particle crosses a boundary:
 
 $$
-x_i \rightarrow x_i - L \cdot \text{round}\left(\dfrac{x_i}{L}\right)
+x_i \rightarrow x_i - L.round(\frac{x_{i}}{L})
 $$
 
-Where $L$ is the length of the simulation box.
+where $L$ is the length of the simulation box.
 
 ### Minimum Image Convention
 
-The Minimum Image Convention ensures that _each particle interacts only with the closest periodic image of other particles_.
-
+The Minimum Image Convention ensures that _each particle interacts only with the closest periodic image of other particles_.  
 For a cubic box with length $L$, the displacement vector between particles $i$ and $j$ is adjusted as:
 
 $$
@@ -50,68 +48,52 @@ r_{ij} = r_i - r_j
 $$
 
 $$
-r_{ij} = r_{ij} - L \cdot \text{round} \left( \dfrac{r_{ij}}{L} \right)
+r_{ij} = r_{ij} - L \times \text{round} \left( \frac{r_{ij}}{L} \right)
 $$
 
 ### Potentials
 
-- Molecular systems at atomic resolution are described in terms of **intramolecular** and **intermolecular** interactions.
-- The _intra_ refers to all bonded interactions, and _inter_ refers to the non-bonded interactions.
-
-#### Bonded Interactions
-
-- Bonds
-- Angles
-- Dihedrals
-
-#### Non-bonded Interactions
-
-- Van der Waals interactions
-- Electrostatic interactions
+- Molecular systems at atomic resolution are described in terms of _intramolecular_ interactions and _intermolecular_ interactions.
+- The 'intra' constitutes all bonded interactions and the 'inter' constitutes the non-bonded interactions.
+- **Bonded Interactions**
+  - Bonds
+  - Angles
+  - Dihedrals
+- **Non-bonded Interactions**
+  - Van der Waals interaction
+  - Electrostatic interactions
 
 ### Lennard-Jones Potential
 
-The Lennard-Jones potential is a simple model that describes the essential features of interactions between simple atoms and molecules:  
-Two interacting particles repel each other at very close distances, attract each other at moderate distances, and eventually stop interacting at infinite distances.
-
+The Lennard-Jones potential is a simple model that describes the essential features of interactions between simple atoms and molecules: Two interacting particles repel each other at very close distance, attract each other at moderate distance, and eventually stop interacting at infinite distance.
 The general potential is given as:
 
 $$
-V_{LJ}(r) = \dfrac{A_n}{r^{n}} - \dfrac{B_m}{r^{m}}
+V_{LJ}(r) = \frac{A_{n}}{r^{n}} - \frac{B_{m}}{r^{m}}
 $$
 
-The most common form is the Lennard-Jones 12-6 potential:
+The most common form of this potential is the Lennard-Jones 12-6 potential:
 
 $$
-V_{LJ}(r) = 4\epsilon \left[ \left( \dfrac{\sigma}{r} \right)^{12} - \left( \dfrac{\sigma}{r} \right)^{6} \right]
+V_{LJ}(r) = 4\epsilon\;[(\frac{\sigma}{r^{12}} - \frac{\sigma}{r^{6}})]
 $$
 
-Where:
-
-- The first term represents the repulsion (positive).
-- The second term represents attraction (negative).
+where, the 1st term represents the repulsion term of potential (hence, positive) and the 2nd term represents the attractive term (hence, negative).
 
 ### Ergodic Hypothesis
 
-The ergodic hypothesis states that, over long periods, the time average of a system's observable property equals the ensemble average of that property.  
-In simpler terms, the time a system spends in a particular state is proportional to the number of microstates corresponding to that state.
+The ergodic hypothesis states that, over long periods of time, the time average of a system's observable property is equal to the ensemble average of that property. In simpler terms, it suggests that the time a system spends in a particular state is proportional to the number of microstates corresponding to that state.
 
 ---
 
 ## Algorithm
 
 - **Initialization**
-
-  - Positions and velocities of $N$ particles are randomly initiated inside a cubic box of length $L$.
-
+  - positions and velocities of $N$ particles are randomly initiated inside a cubic box of length $L$.
 - **Force Calculation**
-
   - Calculate forces between particles using the Minimum Image Convention.
-
-- **Integrate Equations of Motion**
-
+- **Integrate equations of motion**
   - Integrate Newton’s equations of motion using the _Velocity-Verlet algorithm_.
-
 - **MD Simulation**
   - Iterate over time steps, updating positions and velocities.
 
@@ -121,40 +103,238 @@ In simpler terms, the time a system spends in a particular state is proportional
 
 ### Subroutine: Lattice Positions
 
-We create a function called `lattice_pos`. It takes inputs: `index`, `Lx`, `Ly`, `Lz`, and `lattice_const`, and gives outputs: `a1`, `a2`, and `a3`.
+```
+function [a1, a2, a3] = lattice_pos(index, Lx, Ly, Lz, lattice_const)
+    l = 1;
+    for i = -Lx/2:Lx/2
+        x = i * lattice_const;
+        for j = -Ly/2:Ly/2
+            y = j * lattice_const;
+            for k = -Lz/2:Lz/2
+                z = k * lattice_const;
+                if (abs(x) < Lx/2) & (abs(y) < Ly/2) & (abs(z) < Lz/2) & (l <= index) then
+                    a1 = x;
+                    a2 = y;
+                    a3 = z;
+                    l = l + 1;
+                end
+            end
+        end
+    end
+endfunction
+```
 
-- This function generates the lattice coordinates of `npart` particles.
-- It starts by placing an atom at $-L/2$ to $L/2$ in $x$, $y$, and $z$ directions.
-- `Lx`, `Ly`, and `Lz` are the dimensions of the system box.
+- Here, we create a function called `lattice_pos`. This function takes inputs: `index`, `Lx`, `Ly`, `Lz` and `lattice_const` and gives outputs: `a1`, `a2` and `a3`.
+- This function essentially generates the lattice coordinates of `npart` no. of particles.
+- It starts by placing an atom at ${-L}/{2}$ to $L/2$ in x, y and z directions.
+- `Lx`, `Ly` and `Lz` are the dimensions of the system box.
 
 ### Subroutine: Initialization
 
-We create a function called `initialization`.  
-The outputs of this function are:
+```
+function [x, y, z, xm, ym, zm, vx, vy, vz] = initialization(npart, dt, Lx, Ly, Lz, lattice_const, temp)
 
-- Positions: `x`, `y`, and `z`
-- Modified positions: `xm`, `ym`, and `zm`
-- Velocities: `vx`, `vy`, and `vz`
+    sumvx = 0;
+    sumvy = 0;
+    sumvz = 0;
+    sumv2 = 0;
 
-The first loop:
+    for i = 1:npart
+        [x(i), y(i), z(i)] = lattice_pos(i, Lx, Ly, Lz, lattice_const);
 
-- Generates initial positions for `npart` particles.
-- Assigns random initial velocities in 3D.
-- `rand() - 0.5` ensures velocities are bidirectional.
+        vx(i) = (rand() - 0.5);
+        vy(i) = (rand() - 0.5);
+        vz(i) = (rand() - 0.5);
+
+        sumvx = sumvx + vx(i);
+        sumvy = sumvy + vy(i);
+        sumvz = sumvz + vz(i);
+
+        sumv2 = sumv2 + (vx(i)^2 + vy(i)^2 + vz(i)^2);
+    end
+
+    sumvx = sumvx/npart;
+    sumvy = sumvy/npart;
+    sumvz = sumvz/npart;
+
+    sumv2 = sumv2/npart;
+
+    fs = sqrt(3*temp/sumv2);
+
+    for i = 1:npart
+        vx(i) = (vx(i) - sumvx) * fs;
+        vy(i) = (vy(i) - sumvy) * fs;
+        vz(i) = (vz(i) - sumvz) * fs;
+
+        xm(i) = x(i) - vx(i) * dt;
+        ym(i) = y(i) - vy(i) * dt;
+        zm(i) = z(i) - vz(i) * dt;
+    end
+endfunction
+```
+
+- Here, we create a function called `initialization`. The outputs of this function are the positions: `x`, `y` and `z`; the modified positions: `xm`, `ym` and `zm` and the velocities: `vx`, `vy` and `vz`.
+- The first `for loop` generates initial positions for 1 to `npart` no. of particles. After this, the loop gives these particles some random initial velocities in 3D. $-\;0.5$ is subtracted from the `rand()` function to make the velocity bi-directional (meaning, left and right or north and south).
 
 #### Scaling Factor
 
-- Calculates total velocities and the sum of squared velocities to compute **average kinetic energy**.
-- Adjusts velocities with the scaling factor `fs` so that the kinetic energy matches the desired temperature:
-
-$$
-\text{From Equipartition theorem:} \quad \langle KE \rangle = \dfrac{3}{2} k_B T
-$$
-
-- Modified positions `xm`, `ym`, and `zm` are used for _velocity-verlet integration_.
+- The total velocities and the sum of the squared velocities are added to be used for **average potential energy** and **average kinetic energy** calculations respectively.
+- Average velocity of the system i.e. `sumv/npart` and average `sumv2` are also obtained.
+- The second `for loop` modifies the velocities and positions (`xm`, `ym` and `zm`) using an `fs` - scaling factor.
+- The `scaling factor` adjusts velocities so the average kinetic energy corresponds to the desired temp (the `3 * temp` part comes from **Equipartition theorem**).
+  $$
+  From\;Equipartition\;theorem,\;average\;kinetic\;energy = \frac{3}{2} k_{B}  T
+  $$
+- Modifies positions are created to store the previous positions values to be used later in the **velocity-verlet calculation**.
 
 ### Subroutine: Force Calculation
 
-_Description placeholder_ (Code examples can follow this if you wish).
+```
+function [fx, fy, fz, en] = force(npart, x, y, z, rc, Lx, Ly, Lz, ecut)
+    en = 0;
+    fx = zeros(1, npart);
+    fy = zeros(1, npart);
+    fz = zeros(1, npart);
+
+    for i = 1:npart-1
+        for j = i+1:npart
+            xr = x(i) - x(j);
+            xr = xr - Lx*round(xr/Lx);
+
+            yr = y(i) - y(j);
+            yr = yr - Ly*round(yr/Ly);
+
+            zr = z(i) - z(j);
+            zr = zr - Lz*round(zr/Lz);
+
+            r2 = xr^2 + yr^2 + zr^2;
+
+            rc2 = rc^2;
+
+            if (r2 <= rc2) then
+                r2i = 1/r2;
+                r6i = r2i^3;
+
+                ff = 48*r2i*r6i*(r6i-0.5); //Lennard-Jones Potential
+
+                fx(i) = fx(i) + ff*xr;
+                fy(i) = fy(i) + ff*yr;
+                fz(i) = fz(i) + ff*zr;
+
+                fx(j) = fx(j) - ff*xr;
+                fy(j) = fy(j) - ff*yr;
+                fz(j) = fz(j) - ff*zr;
+
+                en = en + 4*r6i*(r6i-1) - ecut;
+            end
+        end
+    end
+endfunction
+```
+
+- Here, we introduce a new subroutine called `force`. This function gives the outputs: force and energy i.e. `f` and `en`.
+- The `for loop` calculates the forces and the potential energy of the system. It does this by calculating the squared distance `r2`.
+- It also computes the inverse distances and force from the Lennard-Jones potential.
+
+### Subroutine: Integrate equations of motion
+
+```
+function [temperature, etot, xm, ym, zm, x, y, z, KE, PE] = integrate_eqn(npart, Lx, Ly, Lz, dt, x, y, z, xm, ym, zm, fx, fy, fz, en, temp)
+    sumvv2 = 0;
+    for i = 1:npart
+        xx = 2*x(i) - xm(i) + (dt^2)*fx(i);                    \\verlet algorithm
+        yy = 2*y(i) - ym(i) + (dt^2)*fy(i);
+        zz = 2*z(i) - zm(i) + (dt^2)*fz(i);
+
+        vxx(i) = (xx - xm(i))/(2*dt);                          \\velocity
+        vyy(i) = (yy - ym(i))/(2*dt);
+        vzz(i) = (zz - zm(i))/(2*dt);
+
+        sumvv2 = sumvv2 + (vxx(i)^2 + vyy(i)^2 + vzz(i)^2);
+
+        xm(i) = x(i);
+        x(i) = xx;
+
+        ym(i) = y(i);
+        y(i) = yy;
+
+        zm(i) = z(i);
+        z(i) = zz;
+    end
+    temperature = sumvv2/(3*npart);
+    KE = sumvv2/(2*npart);
+    PE = en/npart;
+    etot = KE + PE;
+endfunction
+```
+
+- `integrate_eqn` gives total energy, positions and modified positions, kinetic and potential energy as the output.
+- Updates particle positions using Verlet integration and calculates particle velocities (approximate, from positions).
+
+### Subroutine: Main loop
+
+```
+npart = 100;
+Lx = 10;
+Ly = 10;
+Lz = 10;
+lattice_const = 1.1;
+rc = 2.5;
+ecut = 4*((1/rc)^12 - (1/rc)^6);
+dt = 0.001;
+temp = 2;
+tmax = 100;
+
+fd = mopen("traj_100.xyz", "wt");
+
+// Open energy log file and add headers
+energy_file = mopen("energy_log.txt", "wt");
+mfprintf(energy_file, "Timestep\tKineticEnergy\tPotentialEnergy\tTotalEnergy\n");
+
+// Initialization
+[x, y, z, xm, ym, zm, vx, vy, vz] = initialization(npart, dt, Lx, Ly, Lz, lattice_const, temp);
+
+t = 0;
+count = 0;
+
+while (t < tmax)
+    [fx, fy, fz, en] = force(npart, x, y, z, rc, Lx, Ly, Lz, ecut);
+    [temperature, etot, xm, ym, zm, x, y, z, KE, PE] = integrate_eqn(npart, Lx, Ly, Lz, dt, x, y, z, xm, ym, zm, fx, fy, fz, en, temp);
+
+    mfprintf(fd, "%d\n\n", npart);
+    for i = 1:npart
+//        x(i) = x(i) - Lx*round(x(i)/Lx);
+//        y(i) = y(i) - Ly*round(y(i)/Ly);
+//        z(i) = z(i) - Lz*round(z(i)/Lz);
+        mfprintf(fd, "Ar %f %f %f\n", x(i), y(i), z(i));
+    end
+
+    // Log timestep, KE, PE, and Total Energy to file
+    mfprintf(energy_file, "%f\t%f\t%f\t%f\n", t, KE, PE, etot);
+
+    t = t + dt;
+    count = count + 1;
+    disp(count);
+end
+
+mfprintf(fd, 'END');
+mclose(fd);
+mclose(energy_file);
+```
+
+- Initialization:
+  - Calls `initialization` to set initial positions (x, y, z), previous positions (`xm, ym, zm`), and velocities (`vx, vy, vz`).
+- Time Integration Loop (`while t < tmax`):
+  - _Force calculation_: Computes forces between particles using `force`, based on the Lennard-Jones potential and periodic boundary conditions.
+  - _Integrate equations of motion_: Updates positions and velocities with `integrate_eqn` using the Velocity-Verlet algorithm.
+  - _Output trajectory_: Writes current particle positions to `traj_100.xyz` at every step.
+  - _Output energies_: Writes timestep, kinetic energy (KE), potential energy (PE), and total energy to `energy_log.txt` file.
+  - _Time update_: Increments simulation time `t` and step counter `count`.
+- End of Simulation:
+  - Writes `END` to the trajectory file and closes all files.
 
 ---
+
+# Result
+
+Thus, the modelling and simulation of a simple gaseous system was created and studied using Scilab and VMD.

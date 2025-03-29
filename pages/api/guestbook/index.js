@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Unauthorized' })
     }
 
-    const { name } = session.user
+    const { name, email } = session.user
     const bodyContent = (req.body.body || '').slice(0, 500).trim()
 
     if (!bodyContent) {
@@ -43,6 +43,7 @@ export default async function handler(req, res) {
         data: {
           body: bodyContent,
           created_by: name,
+          email: email,
         },
       })
 
